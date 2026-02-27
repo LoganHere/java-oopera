@@ -7,7 +7,7 @@ public class Director extends Person {
     }
 
     public void printDirectorNameSurname() {
-        System.out.println("Режиссёр: " + getName() + " " + getSurname());
+        System.out.println("Режиссёр: " + name + " " + surname);
     }
 
     public int getNumberOfShows() {

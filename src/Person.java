@@ -1,7 +1,10 @@
 public class Person {
-    private String name;
-    private String surname;
-    private Gender gender;
+    protected String name;
+    protected String surname;
+    protected Gender gender;
+    //Не до конца понимаю, почему лучше использовать protected, вместо private. Будет здорово, если объясните.
+    //Если это отдельное использование protected для наглядной демонстрации того, что наследники используют
+    //особый доступ, тогда вопросов нет.
 
     public Person(String name, String surname, Gender gender) {
         this.name = name;

@@ -2,10 +2,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Show {
-    private String title;
-    private int duration;
-    private String director;
-    private ArrayList<Actor> listOfActors;
+    protected String title;
+    protected int duration;
+    protected String director;
+    protected ArrayList<Actor> listOfActors;
 
     public Show(String title, int duration, String director, ArrayList<Actor> listOfActors) {
         this.title = title;
@@ -23,7 +23,7 @@ public class Show {
 
         for (int i = 0; i < listOfActors.size(); i++) {
             Actor actor = listOfActors.get(i);
-            System.out.println((i+1) + ". " + actor);
+            System.out.println((i + 1) + ". " + actor);
         }
     }
 
@@ -45,46 +45,48 @@ public class Show {
         }
     }
 
-//    Я решил добавить обработку на тот случай, если существуют актёры с одинаковой фамилией, из-за этого метод
-//    стал слишком объёмным. Если решите, что его стоит разбить - придётся выкручиваться. Дайте подсказку, что стоит
-//    перенести в отдельный метод.
-
-//    Я дошёл до заданий в Main и понял, что дорабатывать метод не имело смысла, ибо мы не делаем меню.
-//    Без внятного ТЗ результат ХЗ
+//    Декомпозировал, согласно вашим советам
 
     public void changeActor(Actor newActor, String surnameToReplace) {
         ArrayList<Integer> matchingIndex = new ArrayList<>();
 
         for (int i = 0; i < listOfActors.size(); i++) {
             Actor currentActor = listOfActors.get(i);
-            if(currentActor.getSurname().equalsIgnoreCase(surnameToReplace)) {
+            if (currentActor.getSurname().equalsIgnoreCase(surnameToReplace)) {
                 matchingIndex.add(i);
             }
         }
 
         if (matchingIndex.isEmpty()) {
             System.out.println("Актёр с фамилией " + surnameToReplace + " не найден в спектакле.");
-        } else if (matchingIndex.size() == 1){
-            int index = matchingIndex.get(0);
+        } else if (matchingIndex.size() == 1) {
+            replaceSingleActor(newActor, matchingIndex.get(0));
+        } else {
+            replaceMultiActors(newActor, matchingIndex);
+        }
+    }
+
+    private void replaceSingleActor(Actor newActor, int index) {
+        Actor oldActor = listOfActors.get(index);
+        listOfActors.set(index, newActor);
+        System.out.println("Актёр " + oldActor + " заменён на " + newActor);
+    }
+
+    private void replaceMultiActors(Actor newActor, ArrayList<Integer> matchingIndex) {
+        System.out.println("Найдено несколько актёров");
+        for (int i = 0; i < matchingIndex.size(); i++) {
+            Actor actor = listOfActors.get(matchingIndex.get(i));
+            System.out.println((i + 1) + ". " + actor);
+        }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Выберите номер: ");
+        int choice = scanner.nextInt();
+
+        if (choice >= 1 && choice <= matchingIndex.size()) {
+            int index = matchingIndex.get(choice - 1);
             Actor oldActor = listOfActors.get(index);
             listOfActors.set(index, newActor);
-            System.out.println("Актёр " + oldActor + " заменён на " + newActor);
-        } else {
-            System.out.println("Найдено несколько актёров");
-            for (int i = 0; i < matchingIndex.size(); i++) {
-                Actor actor = listOfActors.get(matchingIndex.get(i));
-                System.out.println((i+1) + ". " + actor);
-            }
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Выберите номер: ");
-            int choice = scanner.nextInt();
-
-            if(choice >= 1 && choice <= matchingIndex.size()) {
-                int index = matchingIndex.get(choice - 1);
-                Actor oldActor = listOfActors.get(index);
-                listOfActors.set(index, newActor);
-                System.out.println("Заменён: " + oldActor.getName() + " " + oldActor.getSurname());
-            }
+            System.out.println("Заменён: " + oldActor.getName() + " " + oldActor.getSurname());
         }
     }
 
